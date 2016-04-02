@@ -1,5 +1,7 @@
 package io.sharif.prj1.st91110439.st91106019.project1;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,7 +23,9 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton arrowDown;
     private ImageButton arrowRight;
     private ImageButton arrowLeft;
+    private ImageButton infoDetails;
     private ImageView gopher;
+    SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,32 +38,52 @@ public class MainActivity extends AppCompatActivity {
         arrowRight = (ImageButton)findViewById(R.id.arrow_right);
         arrowLeft = (ImageButton)findViewById(R.id.arrow_left);
         gopher = (ImageView)findViewById(R.id.gopher);
-        arrowUp.setOnClickListener(new View.OnClickListener() {
+        infoDetails=(ImageButton)findViewById(R.id.info_details);
+        prefs=getSharedPreferences("com.gopher.app", Context.MODE_PRIVATE);
+        boolean isSaved=prefs.getBoolean("isSaved",false);
+        if(isSaved){
+            gopher.setX(prefs.getFloat("x",0));
+            gopher.setY(prefs.getFloat("y", 0));
+            System.err.println(prefs.getFloat("x", 0));
+            prefs.edit().putBoolean("isSaved", false).apply();
+        }
+        arrowUp.setOnTouchListener(new RepeatListener(400, 100, new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 float y = gopher.getY();
-                gopher.setY(y-10);
+                gopher.setY(y-15);
             }
-        });
-        arrowDown.setOnClickListener(new View.OnClickListener() {
+        }));
+        arrowDown.setOnTouchListener(new RepeatListener(400, 100, new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 float y = gopher.getY();
-                gopher.setY(y+10);
+                gopher.setY(y + 15);
             }
-        });
-        arrowRight.setOnClickListener(new View.OnClickListener() {
+        }));
+        arrowRight.setOnTouchListener(new RepeatListener(400, 100, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                float x = gopher.getX();
+                gopher.setX(x + 15);
+            }
+        }));
+        arrowLeft.setOnTouchListener(new RepeatListener(400, 100, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                float x = gopher.getX();
+                gopher.setX(x - 15);
+            }
+        }));
+        infoDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                float x = gopher.getX();
-                gopher.setX(x-10);
-            }
-        });
-        arrowLeft.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                float x = gopher.getX();
-                gopher.setX(x+10);
+                prefs.edit().putBoolean("isSaved", true).apply();
+                prefs.edit().putFloat("x", gopher.getX()).apply();
+                prefs.edit().putFloat("y", gopher.getY()).apply();
+                System.err.println(gopher.getX());
+                System.err.println(prefs.getFloat("x", 0));
+                Toast.makeText(v.getContext(),v.getContext().getString(R.string.saved),Toast.LENGTH_LONG).show();
             }
         });
         setSupportActionBar(toolbar);
@@ -83,21 +108,9 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                AboutUsDialogFragment dialog = new AboutUsDialogFragment();
-                dialog.show(getFragmentManager(), "test");
-                return false;
-            }
-        });
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        AboutUsDialogFragment dialog = new AboutUsDialogFragment();
+        dialog.show(getFragmentManager(), "test");
+        return false;
     }
 
     public void showAnimation()

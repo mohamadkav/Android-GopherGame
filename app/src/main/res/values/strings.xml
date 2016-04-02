@@ -1,4 +1,8 @@
 <resources>
-    <string name="app_name">Project1</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">prj1</string>
+    <string name="action_settings">درباره ما</string>
+    <string name="dialog_title">درباره ما</string>
+    <string name="first_student_detail">فرزین هوشمند ۹۱۱۰۶۰۱۹</string>
+    <string name="second_student_detail">محمد کاووسی ۹۱۱۱۰۴۳۳</string>
+    <string name="saved">ذخیره شد</string>
 </resources>
