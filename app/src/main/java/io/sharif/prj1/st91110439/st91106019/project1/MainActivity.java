@@ -1,6 +1,8 @@
 package io.sharif.prj1.st91110439.st91106019.project1;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
@@ -8,9 +10,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -28,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton infoDetails;
     private ImageView gopher;
     SharedPreferences prefs;
+    AlertDialog actions;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,13 +77,36 @@ public class MainActivity extends AppCompatActivity {
                 gopher.setX(x - 15);
             }
         }));
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose");
+        String[] options = { "Save", "NewGame" };
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        prefs.edit().putBoolean("isSaved", true).apply();
+                        prefs.edit().putFloat("x", gopher.getX()).apply();
+                        prefs.edit().putFloat("y", gopher.getY()).apply();
+                        Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.saved), Toast.LENGTH_SHORT).show();
+                        break;
+                    case 1:
+                        //TODO: farzin!!
+                        gopher.setX(0);
+                        gopher.setY(0);
+                        Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.newgame), Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", null);
+        actions = builder.create();
         infoDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                prefs.edit().putBoolean("isSaved", true).apply();
-                prefs.edit().putFloat("x", gopher.getX()).apply();
-                prefs.edit().putFloat("y", gopher.getY()).apply();
-                Toast.makeText(v.getContext(), v.getContext().getString(R.string.saved), Toast.LENGTH_SHORT).show();
+                actions.show();
             }
         });
         setSupportActionBar(toolbar);
