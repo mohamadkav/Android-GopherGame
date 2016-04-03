@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,14 +41,8 @@ public class MainActivity extends AppCompatActivity {
         arrowLeft = (ImageButton)findViewById(R.id.arrow_left);
         gopher = (ImageView)findViewById(R.id.gopher);
         infoDetails=(ImageButton)findViewById(R.id.info_details);
+        final RelativeLayout gopherParent=(RelativeLayout)findViewById(R.id.game_board);
         prefs=getSharedPreferences("com.gopher.app", Context.MODE_PRIVATE);
-        boolean isSaved=prefs.getBoolean("isSaved",false);
-        if(isSaved){
-            gopher.setX(prefs.getFloat("x",0));
-            gopher.setY(prefs.getFloat("y", 0));
-            System.err.println(prefs.getFloat("x", 0));
-            prefs.edit().putBoolean("isSaved", false).apply();
-        }
         arrowUp.setOnTouchListener(new RepeatListener(400, 100, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,12 +77,22 @@ public class MainActivity extends AppCompatActivity {
                 prefs.edit().putBoolean("isSaved", true).apply();
                 prefs.edit().putFloat("x", gopher.getX()).apply();
                 prefs.edit().putFloat("y", gopher.getY()).apply();
-                System.err.println(gopher.getX());
-                System.err.println(prefs.getFloat("x", 0));
-                Toast.makeText(v.getContext(),v.getContext().getString(R.string.saved),Toast.LENGTH_LONG).show();
+                Toast.makeText(v.getContext(), v.getContext().getString(R.string.saved), Toast.LENGTH_SHORT).show();
             }
         });
         setSupportActionBar(toolbar);
+        boolean isSaved=prefs.getBoolean("isSaved",false);
+        if(isSaved){
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    gopher.setX(prefs.getFloat("x",0));
+                    gopher.setY(prefs.getFloat("y",0));
+                    prefs.edit().putBoolean("isSaved", false).apply();
+                }
+            }, 500);
+        }
     }
 
     @Override
