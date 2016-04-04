@@ -4,12 +4,16 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -93,10 +98,13 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.saved), Toast.LENGTH_SHORT).show();
                         break;
                     case 1:
-                        //TODO: farzin!!
                         gopher.setX(dummyTextView.getX()-gopher.getWidth()/2);
                         gopher.setY(dummyTextView.getY()-gopher.getHeight()/2);
-                        Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.newgame), Toast.LENGTH_SHORT).show();
+                    {
+                        SpannableString span=new SpannableString(getString(R.string.new_game_persian));
+                        span.setSpan(new RainbowSpan(getApplicationContext()),0,getString(R.string.new_game_persian).length(),0);
+                        Toast.makeText(getApplicationContext(),span,Toast.LENGTH_LONG).show();
+                    }
                         break;
                     default:
                         break;
