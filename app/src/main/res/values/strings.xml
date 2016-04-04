@@ -7,4 +7,7 @@
     <string name="saved">ذخیره شد</string>
     <string name="newgame">بازی جدید</string>
     <string name="new_game_persian">واقعا خسته نباشید... بازی جدید شروع شد</string>
+    <string name="choose">انتخاب</string>
+    <string name="save">ذخیره</string>
+    <string name="cancel">بیخیال</string>
 </resources>

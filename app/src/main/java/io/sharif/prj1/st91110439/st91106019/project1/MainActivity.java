@@ -85,8 +85,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }));
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Choose");
-        String[] options = { "Save", "NewGame" };
+        builder.setTitle(getString(R.string.choose));
+        String[] options = new String[2];
+        options[0]=getString(R.string.save);
+        options[1]=getString(R.string.newgame);
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -111,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        builder.setNegativeButton("Cancel", null);
+        builder.setNegativeButton(getString(R.string.cancel), null);
         actions = builder.create();
         infoDetails.setOnClickListener(new View.OnClickListener() {
             @Override
