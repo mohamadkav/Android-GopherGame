@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton arrowLeft;
     private ImageButton infoDetails;
     private ImageView gopher;
+    private TextView dummyTextView;
     SharedPreferences prefs;
     AlertDialog actions;
 
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         infoDetails=(ImageButton)findViewById(R.id.info_details);
         final RelativeLayout gopherParent=(RelativeLayout)findViewById(R.id.game_board);
         prefs=getSharedPreferences("com.gopher.app", Context.MODE_PRIVATE);
+        dummyTextView=(TextView)findViewById(R.id.textView);
         arrowUp.setOnTouchListener(new RepeatListener(400, 100, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 1:
                         //TODO: farzin!!
-                        gopher.setX(0);
-                        gopher.setY(0);
+                        gopher.setX(dummyTextView.getX()-gopher.getWidth()/2);
+                        gopher.setY(dummyTextView.getY()-gopher.getHeight()/2);
                         Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.newgame), Toast.LENGTH_SHORT).show();
                         break;
                     default:
@@ -120,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                     gopher.setY(prefs.getFloat("y",0));
                     prefs.edit().putBoolean("isSaved", false).apply();
                 }
-            }, 500);
+            }, 200);
         }
     }
 
